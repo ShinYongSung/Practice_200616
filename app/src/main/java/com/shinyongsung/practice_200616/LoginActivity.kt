@@ -1,11 +1,10 @@
 package com.shinyongsung.practice_200616
 
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import com.shinyongsung.practice_200616.util.ServerUtil
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
-import kotlin.math.log
 
 class LoginActivity : BaseAcitivity() {
 
@@ -23,17 +22,31 @@ class LoginActivity : BaseAcitivity() {
             val inputEmail = emailEdt.text.toString()
             val inputPw = pwEdt.text.toString()
 
-            Log.d("화면에서 보는 11111111111111",toString())
 
-            ServerUtil.postRequestLogin(mContext,inputEmail,inputPw,object : ServerUtil.Companion.JsonResponseHandler {
+            ServerUtil.postRequestLogin(mContext, inputEmail, inputPw, object : ServerUtil.Companion.JsonResponseHandler {
                 override fun onResponse(json: JSONObject) {
-                    Log.d("화면에서 보는 응답", json.toString())
+                    val codeNum = json.getInt("code")
+
+                    if (codeNum == 200){
+
+                        val data = json.getJSONObject("data")
+                        val user = json.getJSONObject("user")
+                        val loginUserEmail = user.getString("email")
+//                        val message = json.getString("message")
+
+                        runOnUiThread {
+                            Toast.makeText(mContext,"${loginUserEmail}님 환영합니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    else {
+                        val message = json.getString("message")
+                        runOnUiThread {
+                            Toast.makeText(mContext, message,Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
                 }
-            }
-
-
-
-            )
+            })
         }
     }
 
