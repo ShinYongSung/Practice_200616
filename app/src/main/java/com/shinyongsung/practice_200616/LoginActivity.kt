@@ -1,5 +1,6 @@
 package com.shinyongsung.practice_200616
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import com.shinyongsung.practice_200616.util.ServerUtil
@@ -17,6 +18,11 @@ class LoginActivity : BaseAcitivity() {
     }
 
     override fun setupEvents() {
+
+        singUpBtn.setOnClickListener {
+            val myIntent = Intent(mContext, SingUpActivity::class.java)
+            startActivity(myIntent)
+        }
 
         loginBtn.setOnClickListener {
             val inputEmail = emailEdt.text.toString()
